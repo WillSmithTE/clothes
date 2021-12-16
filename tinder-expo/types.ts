@@ -38,10 +38,11 @@ export type TabBarIconT = {
   text: string;
 };
 
-export type DataT = {
+export type ClothingItem = {
   id: number;
   name: string;
-  isOnline: boolean;
+  color?: string;
+  brand?: string;
   match: string;
   description: string;
   message: string;

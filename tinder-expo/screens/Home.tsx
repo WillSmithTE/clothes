@@ -4,6 +4,7 @@ import CardStack, { Card } from "react-native-card-stack-swiper";
 import { City, Filters, CardItem } from "../components";
 import styles from "../assets/styles";
 import DEMO from "../assets/data/demo";
+import Logout from "../components/Logout";
 
 const Home = () => {
   const [swiper, setSwiper] = useState<CardStack | null>(null);
@@ -16,7 +17,8 @@ const Home = () => {
       <View style={styles.containerHome}>
         <View style={styles.top}>
           <City />
-          <Filters />
+          {/* <Filters /> */}
+          <Logout />
         </View>
 
         <CardStack
