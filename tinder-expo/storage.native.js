@@ -7,3 +7,8 @@ export function getStoredItemAsync(key) {
 export function saveItem(key, value) {
   return SecureStore.setItemAsync(key, value)
 }
+
+export function clearItem(key) {
+  return SecureStore.deleteItemAsync(key)
+}
+

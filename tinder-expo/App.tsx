@@ -14,43 +14,16 @@ import jwt_decode from "jwt-decode";
 import { Loading } from "./components/Loading";
 import { ClothingItem } from "./types";
 import { Text } from "react-native";
+import { useAuthReducer } from "./login/useAuthReducer";
+import { getToken } from "./login/token";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TOKEN_KEY = 'userToken'
 
 const App = () => {
 
-  const [state, dispatch] = React.useReducer(
-    (prevState: any, action: any) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
-    }
-  );
+  const [state, dispatch] = useAuthReducer();
 
   const [error, setError] = React.useState(false);
   const [clothes, setClothes] = React.useState<ClothingItem[] | undefined>(undefined);
@@ -73,8 +46,7 @@ const App = () => {
       let userToken;
 
       try {
-        userToken = await getStoredItemAsync(TOKEN_KEY);
-        console.error({userToken})
+        userToken = await getToken();
       } catch (error) {
         console.error({error})
         // Restoring token failed
@@ -98,8 +70,6 @@ const App = () => {
         // After getting token, we need to persist the token using `SecureStore`
         // In the example, we'll use a dummy token
         const token = await api.login(data)
-
-        saveItem(TOKEN_KEY, token)
 
         dispatch({ type: 'SIGN_IN', token: token });
       },
