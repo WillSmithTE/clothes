@@ -6,6 +6,8 @@ export type CardItemT = {
   isOnline?: boolean;
   matches?: string;
   name: string;
+  brand?: string;
+  price?: number;
 };
 
 export type IconT = {
@@ -39,10 +41,11 @@ export type TabBarIconT = {
 };
 
 export type ClothingItem = {
-  id: number;
+  id: string;
   name: string;
   color?: string;
   brand?: string;
+  price?: number;
   match: string;
   description: string;
   message: string;
@@ -54,3 +57,16 @@ export type ClothingItem = {
   info4?: string;
   location?: string;
 };
+
+export class User {
+  id: string
+  likedItemIds: string[]
+  historyItemIds: string[]
+
+  constructor(id: string) {
+    this.id = id
+    this.likedItemIds = []
+    this.historyItemIds = []
+  }
+}
+

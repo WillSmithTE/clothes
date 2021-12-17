@@ -236,15 +236,15 @@ export default StyleSheet.create({
     marginHorizontal: 10,
   },
 
-  // CONTAINER - MATCHES
-  containerMatches: {
+  // CONTAINER - Likes
+  containerLikes: {
     justifyContent: "space-between",
     flex: 1,
     paddingHorizontal: 10,
   },
 
   // CONTAINER - MESSAGES
-  containerMessages: {
+  containerCart: {
     justifyContent: "space-between",
     flex: 1,
     paddingHorizontal: 10,

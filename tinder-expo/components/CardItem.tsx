@@ -9,6 +9,7 @@ import styles, {
   STAR_ACTIONS,
   WHITE,
 } from "../assets/styles";
+import { NumberFormat } from "./NumberFormat";
 
 const CardItem = ({
   description,
@@ -18,6 +19,8 @@ const CardItem = ({
   isOnline,
   matches,
   name,
+  brand,
+  price,
 }: CardItemT) => {
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
@@ -46,20 +49,22 @@ const CardItem = ({
       <Image source={image} style={imageStyle} />
 
       {/* MATCHES */}
-      {matches && (
+      {/* {matches && (
         <View style={styles.matchesCardItem}>
           <Text style={styles.matchesTextCardItem}>
             <Icon name="heart" color={WHITE} size={13} /> {matches}% Match!
           </Text>
         </View>
-      )}
+      )} */}
 
-      {/* NAME */}
-      <Text style={nameStyle}>{name}</Text>
+      <Text style={nameStyle}>{brand}</Text>
 
-      {/* DESCRIPTION */}
       {description && (
         <Text style={styles.descriptionCardItem}>{description}</Text>
+      )}
+
+      {price && (
+        <Text style={styles.descriptionCardItem}>${price}</Text>
       )}
 
       {/* STATUS */}
@@ -97,3 +102,4 @@ const CardItem = ({
 };
 
 export default CardItem;
+

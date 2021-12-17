@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Icon, ProfileItem } from "../components";
-import DEMO from "../assets/data/demo";
+import {clothes} from "../assets/data/demo";
 import styles, { WHITE } from "../assets/styles";
 
 const Profile = () => {
@@ -21,7 +21,7 @@ const Profile = () => {
     location,
     match,
     name,
-  } = DEMO[7];
+  } = clothes[7];
 
   return (
     <ImageBackground
