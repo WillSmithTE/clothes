@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, ImageBackground } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { City, Filters, CardItem } from "../components";
@@ -9,9 +9,12 @@ import { ClothingItem } from "../types";
 import {AuthContext} from "../login/AuthContext";
 
 const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
-  const [swiper, setSwiper] = useState<CardStack | null>(null);
+
+  const swiper = useRef<CardStack | null>(null);
 
   const { userId } = React.useContext(AuthContext);
+
+  const onSwipedRight = (index: number) => api.likeItem(userId, clothes[index].id)
 
   return (
     <ImageBackground
@@ -26,15 +29,17 @@ const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
         </View>
 
         <CardStack
-          onSwipedRight={(index) => api.likeItem(userId, clothes[index].id)}
+          onSwipedRight={onSwipedRight}
           loop
           verticalSwipe={false}
           renderNoMoreCards={() => null}
-          ref={(newSwiper): void => setSwiper(newSwiper)}
+          ref={swiper}
         >
           {clothes.map((item) => (
             <Card key={item.id}>
               <CardItem
+              onLikeButtonPress={() => swiper.current?.swipeRight()}
+              onDislikeButtonPress={() => swiper.current?.swipeLeft()}
                 hasActions
                 {...item}
               />
