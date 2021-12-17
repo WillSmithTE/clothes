@@ -6,9 +6,12 @@ import styles from "../assets/styles";
 import Logout from "../components/Logout";
 import { api } from "../api";
 import { ClothingItem } from "../types";
+import {AuthContext} from "../login/AuthContext";
 
-const Home = ({clothes}: {clothes: ClothingItem[]}) => {
+const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
   const [swiper, setSwiper] = useState<CardStack | null>(null);
+
+  const { userId } = React.useContext(AuthContext);
 
   return (
     <ImageBackground
@@ -23,6 +26,7 @@ const Home = ({clothes}: {clothes: ClothingItem[]}) => {
         </View>
 
         <CardStack
+          onSwipedRight={(index) => api.likeItem(userId, clothes[index].id)}
           loop
           verticalSwipe={false}
           renderNoMoreCards={() => null}

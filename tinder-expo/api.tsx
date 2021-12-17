@@ -1,10 +1,12 @@
 import { clothes } from "./assets/data/demo"
+import { isNotUndefined } from "./predicates"
 import { ClothingItem, User } from "./types"
 
-const db: { users: User[] } = {
+const db: { users: User[], clothes: ClothingItem[] } = {
     users: [
         new User('098098421-ofi123431')
     ],
+    clothes,
 }
 
 export const api = {
@@ -12,6 +14,7 @@ export const api = {
     getClothesForUser,
     getAllClothes,
     login,
+    getLikedClothesForUser,
 }
 
 async function likeItem(userId: string, itemId: string): Promise<void> {
@@ -32,7 +35,7 @@ async function getClothesForUser(userId: string): Promise<ClothingItem[]> {
     console.debug('getClothesForUser (userId=' + userId)
     try {
         const user = db.users.find(({ id }) => id === userId)
-        if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`)}
+        if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
         const allClothes = await getAllClothes()
         const unseenClothes = allClothes.filter(({ id }) => !user.historyItemIds.includes(id))
         return unseenClothes
@@ -43,11 +46,24 @@ async function getClothesForUser(userId: string): Promise<ClothingItem[]> {
 
 async function getAllClothes(): Promise<ClothingItem[]> {
     console.debug('getAllClothes')
-    return clothes
+    return db.clothes
 }
 
 async function login(data: any): Promise<string> {
     return token
+}
+
+async function getLikedClothesForUser(userId: string): Promise<ClothingItem[]> {
+    console.debug('getLikedClothesForUser (userId=' + userId)
+    try {
+        const user = db.users.find(({ id }) => id === userId)
+        if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
+        return user.likedItemIds
+            .map((itemId) => db.clothes.find(({ id }) => id === itemId))
+            .filter(isNotUndefined)
+    } catch (e) {
+        return Promise.reject(e)
+    }
 }
 
 // http://jwtbuilder.jamiekurtz.com/

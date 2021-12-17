@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -8,39 +8,72 @@ import {
   FlatList,
 } from "react-native";
 import { CardItem, Icon } from "../components";
-import {clothes} from "../assets/data/demo";
+import { clothes } from "../assets/data/demo";
 import styles, { DARK_GRAY } from "../assets/styles";
+import { ClothingItem } from "../types";
+import { api } from "../api";
+import { AuthContext } from "../login/AuthContext";
+import { Error } from "./Error";
+import { Loading } from "../components/Loading";
+import { useIsFocused } from "@react-navigation/native";
+import { LikedItem } from "../components/LikedItem";
 
-const Likes = () => (
-  <ImageBackground
-    source={require("../assets/images/bg.png")}
-    style={styles.bg}
-  >
-    <View style={styles.containerLikes}>
-      <View style={styles.top}>
-        <Text style={styles.title}>Likes</Text>
-        <TouchableOpacity>
-          <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
-        </TouchableOpacity>
-      </View>
+const Likes = () => {
+  const [clothes, setClothes] = React.useState<ClothingItem[] | undefined>(undefined);
+  const { userId } = React.useContext(AuthContext);
+  const [error, setError] = React.useState(false);
+  const isFocused = useIsFocused();
 
-      <FlatList
-        numColumns={2}
-        data={clothes}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+  useEffect(() => {
+    api.getLikedClothesForUser(userId).then(
+      setClothes,
+      () => setError(true)
+    );
+  }, [isFocused]);
+
+  if (error) {
+    return <Error />
+  } else if (clothes) {
+    console.error('here')
+    return <ImageBackground
+      source={require("../assets/images/bg.png")}
+      style={styles.bg}
+    >
+      <View style={styles.containerLikes}>
+        <View style={styles.top}>
+          <Text style={styles.title}>Likes</Text>
           <TouchableOpacity>
-            <CardItem
-              image={item.image}
-              name={item.name}
-              isOnline={item.isOnline}
-              hasVariant
-            />
+            <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
           </TouchableOpacity>
-        )}
-      />
-    </View>
-  </ImageBackground>
-);
+        </View>
+
+        {clothes.length ?
+          <FlatList
+            numColumns={2}
+            data={clothes}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity>
+                <LikedItem
+                  hasVariant
+                  {...item}
+                />
+              </TouchableOpacity>
+            )}
+          /> : <EmptyLikes />}
+      </View>
+    </ImageBackground>
+  } else {
+    return <Loading />
+  }
+}
+
+const EmptyLikes = () => {
+  return <>
+    
+    <Text>Nothing to see here...<br/>Try liking something first</Text>
+    <Text></Text>
+  </>
+}
 
 export default Likes;

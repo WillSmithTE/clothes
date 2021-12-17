@@ -16,8 +16,9 @@ import { ClothingItem } from "./types";
 import { Text } from "react-native";
 import { useAuthReducer } from "./login/useAuthReducer";
 import { getToken } from "./login/token";
+import { Error } from "./screens/Error";
 
-const Stack = createStackNavigator();
+export const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
@@ -25,12 +26,14 @@ const App = () => {
 
   const [state, dispatch] = useAuthReducer();
 
+  const [userId, setUserId] = React.useState<undefined | string>(undefined);
   const [error, setError] = React.useState(false);
   const [clothes, setClothes] = React.useState<ClothingItem[] | undefined>(undefined);
 
   useEffect(() => {
     if (state.userToken !== null) {
       const { user_id }: { user_id: string } = jwt_decode(state.userToken);
+      setUserId(user_id)
       api.getClothesForUser(user_id).then(
         setClothes,
         () => setError(true)
@@ -48,7 +51,7 @@ const App = () => {
       try {
         userToken = await getToken();
       } catch (error) {
-        console.error({error})
+        console.error({ error })
         // Restoring token failed
       }
 
@@ -82,8 +85,9 @@ const App = () => {
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
+      userId,
     }),
-    []
+    [userId]
   );
 
   return <AuthContext.Provider value={authContext}>
@@ -91,7 +95,7 @@ const App = () => {
       <Stack.Navigator>
         {(() => {
           if (error) {
-            return <Stack.Screen name="Error" component={() => <Text>Something went wrong</Text>} />
+            return <Error/>
           } else if (state.userToken === null) {
             return <>
               <Stack.Screen name="Login" component={Login} />
@@ -126,7 +130,7 @@ const App = () => {
                 >
                   <Tab.Screen
                     name="Explore"
-                    children={props => <Home clothes={clothes} {...props}/>}
+                    children={props => <Home clothes={clothes} {...props} />}
                     options={{
                       tabBarIcon: ({ focused }) => (
                         <TabBarIcon
