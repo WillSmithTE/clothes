@@ -1,9 +1,10 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { Text, View } from 'react-native';
 
 export const Loading = () => {
-    return <div style={{width: '100%', textAlign: 'center'}}>
-                <h3>Loading...</h3>
-        <CircularProgress style={{ margin: '0 auto' }} />
-    </div>;
+    return <View style={{ width: '100%' }}>
+        <Text>Loading...</Text>
+        <AnimatedCircularProgress size={120} width={15} fill={0}/>
+    </View>;
 };

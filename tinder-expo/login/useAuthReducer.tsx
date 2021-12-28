@@ -28,6 +28,6 @@ export const useAuthReducer = () => React.useReducer((prevState: any, action: an
     {
         isLoading: true,
         isSignout: false,
-        userToken: '1234', //null,
+        userToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDbG90aGVzU2VydmVyIiwiaWF0IjoxNjM5NzQ3NTA2LCJleHAiOjE2NzEyODM1MDYsImF1ZCI6ImNsb3RoZXMiLCJzdWIiOiIiLCJ1c2VyX2lkIjoiMDk4MDk4NDIxLW9maTEyMzQzMSJ9.Pu1JM2mKMG0N-pi5NBGIVIA7idEAn_MxOwky-2-o_2M', //null,
     }
 )

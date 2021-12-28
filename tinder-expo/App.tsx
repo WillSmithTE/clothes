@@ -32,8 +32,7 @@ const App = () => {
 
   useEffect(() => {
     if (state.userToken !== null) {
-      // const { user_id }: { user_id: string } = jwt_decode(state.userToken);
-      const user_id = '098098421-ofi123431'
+      const { user_id }: { user_id: string } = jwt_decode(state.userToken);
       setUserId(user_id)
       api.getClothesForUser(user_id).then(
         setClothes,
