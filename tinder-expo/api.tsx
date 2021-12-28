@@ -1,6 +1,7 @@
 import { clothes } from "./assets/data/demo"
 import { isNotUndefined } from "./predicates"
 import { ClothingItem, User } from "./types"
+import { stringify } from "./util"
 
 const db: { users: User[], clothes: ClothingItem[] } = {
     users: [
@@ -18,13 +19,15 @@ export const api = {
     addItemToCart,
 }
 
-async function likeItem(userId: string, itemId: string): Promise<void> {
-    console.debug(`likeItem (userId=${userId}, itemId=${itemId})`)
+async function likeItem(userId: string, item: ClothingItem): Promise<void> {
+    console.debug(`likeItem (userId=${userId}, item=${stringify(item)})`)
 
     try {
         const user = db.users.find(({ id }) => id === userId)!!
-        if (!user.likedItemIds.includes(itemId)) {
-            user.likedItemIds.unshift(itemId)
+        user.viewedItems.unshift(item)
+        const alreadyLikedItem = user.likedItems.find(({id}) => id === item.id)
+        if (!alreadyLikedItem) {
+            user.likedItems.unshift(item)
         }
         return Promise.resolve()
     } catch (e) {
@@ -38,7 +41,7 @@ async function getClothesForUser(userId: string): Promise<ClothingItem[]> {
         const user = db.users.find(({ id }) => id === userId)
         if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
         const allClothes = await getAllClothes()
-        const unseenClothes = allClothes.filter(({ id }) => !user.historyItemIds.includes(id))
+        const unseenClothes = allClothes.filter(({ id: clothingId }) => user.viewedItems.find(({id: viewedId}) => viewedId === clothingId) === undefined) 
         return unseenClothes
     } catch (e) {
         return Promise.reject(e)
@@ -59,20 +62,18 @@ async function getLikedClothesForUser(userId: string): Promise<ClothingItem[]> {
     try {
         const user = db.users.find(({ id }) => id === userId)
         if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
-        return user.likedItemIds
-            .map((itemId) => db.clothes.find(({ id }) => id === itemId))
-            .filter(isNotUndefined)
+        return user.likedItems
     } catch (e) {
         return Promise.reject(e)
     }
 }
 
-async function addItemToCart(userId: string, itemId: string): Promise<void> {
-    console.debug(`addItemToCart (userId='${userId}, itemId='${itemId}'`)
+async function addItemToCart(userId: string, item: ClothingItem): Promise<void> {
+    console.debug(`addItemToCart (userId='${userId}, item='${stringify(item)}'`)
     try {
         const user = db.users.find(({ id }) => id === userId)
         if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
-        user.cartItemIds.push(itemId)
+        user.cartItems.unshift(item)
         return Promise.resolve()
     } catch (e) {
         return Promise.reject(e)

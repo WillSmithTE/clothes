@@ -61,15 +61,15 @@ export type ClothingItem = {
 
 export class User {
   id: string
-  likedItemIds: string[]
-  historyItemIds: string[]
-  cartItemIds: string[]
+  likedItems: ClothingItem[]
+  viewedItems: ClothingItem[]
+  cartItems: ClothingItem[]
 
   constructor(id: string) {
     this.id = id
-    this.likedItemIds = []
-    this.historyItemIds = []
-    this.cartItemIds = []
+    this.likedItems = []
+    this.viewedItems = []
+    this.cartItems = []
   }
 }
 

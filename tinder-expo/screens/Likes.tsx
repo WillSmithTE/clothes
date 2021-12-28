@@ -54,8 +54,7 @@ const Likes = ({navigation}: {navigation: any}) => {
             renderItem={({ item }) => (
               <TouchableOpacity>
                 <LikedItem
-                  hasVariant
-                  {...item}
+                  item={item}
                   navigation={navigation}
                 />
               </TouchableOpacity>

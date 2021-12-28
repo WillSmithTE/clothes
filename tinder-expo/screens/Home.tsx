@@ -14,7 +14,7 @@ const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
 
   const { userId } = React.useContext(AuthContext);
 
-  const onSwipedRight = (index: number) => api.likeItem(userId, clothes[index].id)
+  const onSwipedRight = (index: number) => api.likeItem(userId, clothes[index])
 
   return (
     <ImageBackground
