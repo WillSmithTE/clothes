@@ -15,6 +15,7 @@ export const api = {
     getAllClothes,
     login,
     getLikedClothesForUser,
+    addItemToCart,
 }
 
 async function likeItem(userId: string, itemId: string): Promise<void> {
@@ -61,6 +62,18 @@ async function getLikedClothesForUser(userId: string): Promise<ClothingItem[]> {
         return user.likedItemIds
             .map((itemId) => db.clothes.find(({ id }) => id === itemId))
             .filter(isNotUndefined)
+    } catch (e) {
+        return Promise.reject(e)
+    }
+}
+
+async function addItemToCart(userId: string, itemId: string): Promise<void> {
+    console.debug(`addItemToCart (userId='${userId}, itemId='${itemId}'`)
+    try {
+        const user = db.users.find(({ id }) => id === userId)
+        if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
+        user.cartItemIds.push(itemId)
+        return Promise.resolve()
     } catch (e) {
         return Promise.reject(e)
     }

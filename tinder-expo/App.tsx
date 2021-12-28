@@ -5,8 +5,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home, Likes, Cart, Profile } from "./screens";
 import { PRIMARY_COLOR, DARK_GRAY, BLACK, WHITE } from "./assets/styles";
 import TabBarIcon from "./components/TabBarIcon";
-import Login from "./login/Login-UI-UX-React-Native/screens/Login";
-import Signup from "./login/Login-UI-UX-React-Native/screens/Signup";
+// import Login from "./login/Login-UI-UX-React-Native/screens/Login";
+// import Signup from "./login/Login-UI-UX-React-Native/screens/Signup";
 import { AuthContext } from "./login/AuthContext";
 import { getStoredItemAsync, saveItem } from "./storage";
 import { api } from "./api";
@@ -32,7 +32,8 @@ const App = () => {
 
   useEffect(() => {
     if (state.userToken !== null) {
-      const { user_id }: { user_id: string } = jwt_decode(state.userToken);
+      // const { user_id }: { user_id: string } = jwt_decode(state.userToken);
+      const user_id = '098098421-ofi123431'
       setUserId(user_id)
       api.getClothesForUser(user_id).then(
         setClothes,
@@ -96,11 +97,12 @@ const App = () => {
         {(() => {
           if (error) {
             return <Error/>
-          } else if (state.userToken === null) {
-            return <>
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Signup" component={Signup} />
-            </>
+          // } else if (state.userToken === null) {
+          //   return <>
+          //     {/* <Stack.Screen name="Login" component={Login} />*/}
+          //     <Stack.Screen name="Login" children={() => <Text>Login</Text>} />
+          //     {/*<Stack.Screen name="Signup" component={Signup} />*/}
+          //   </>
           } else if (clothes) {
             return <Stack.Screen
               name="Tab"

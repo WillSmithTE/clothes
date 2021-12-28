@@ -87,6 +87,9 @@ export default StyleSheet.create({
     shadowColor: DARK_GRAY,
     shadowOffset: { height: 10, width: 0 },
   },
+  clickedButton: {
+    backgroundColor: DARK_GRAY,
+  },
   miniButton: {
     width: 40,
     height: 40,

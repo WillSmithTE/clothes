@@ -1,4 +1,5 @@
 export type CardItemT = {
+  id?: string;
   description?: string;
   hasActions?: boolean;
   hasVariant?: boolean;
@@ -62,11 +63,13 @@ export class User {
   id: string
   likedItemIds: string[]
   historyItemIds: string[]
+  cartItemIds: string[]
 
   constructor(id: string) {
     this.id = id
     this.likedItemIds = []
     this.historyItemIds = []
+    this.cartItemIds = []
   }
 }
 

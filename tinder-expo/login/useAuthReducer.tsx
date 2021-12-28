@@ -28,6 +28,6 @@ export const useAuthReducer = () => React.useReducer((prevState: any, action: an
     {
         isLoading: true,
         isSignout: false,
-        userToken: null,
+        userToken: '1234', //null,
     }
 )

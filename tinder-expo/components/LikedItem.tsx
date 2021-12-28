@@ -10,6 +10,8 @@ import styles, {
   WHITE,
 } from "../assets/styles";
 import { NumberFormat } from "./NumberFormat";
+import { AuthContext } from "../login/AuthContext";
+import { api } from "../api";
 
 export const LikedItem = ({
   description,
@@ -17,7 +19,9 @@ export const LikedItem = ({
   image,
   brand,
   price,
-}: CardItemT) => {
+  id,
+  navigation,
+}: CardItemT & {navigation: any}) => {
   // Custom styling
   const fullWidth = Dimensions.get("window").width;
 
@@ -63,7 +67,34 @@ export const LikedItem = ({
         <Text style={styles.descriptionCardItem}>${price}</Text>
       )}
 
+      <AddToCartButton itemId={id!!} navigation={navigation} />
+
     </View>
   );
 };
+
+const AddToCartButton = ({ itemId, navigation }: { itemId: string, navigation: any }) => {
+
+  const { userId } = React.useContext(AuthContext);
+  const [isAddedToCart, setIsAddedToCart] = React.useState(false)
+
+  const addToCart = async (id: string) => {
+    try {
+      api.addItemToCart(userId, id)
+      setIsAddedToCart(true)
+    } catch (e) {
+      console.error(`Something went wrong adding item to cart (userId=${userId}, itemId=${itemId}, error=${e})`)
+    }
+  }
+
+  const navigateToCart = () => navigation.navigate('Cart')
+
+  return isAddedToCart ?
+    <TouchableOpacity onPress={navigateToCart} style={{...styles.button, ...styles.clickedButton}}>
+      <Text>Proceed to checkout</Text>
+    </TouchableOpacity> :
+    <TouchableOpacity onPress={() => addToCart(itemId)} style={styles.button}>
+    <Text>Add to cart</Text>
+  </TouchableOpacity>
+}
 

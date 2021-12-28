@@ -18,7 +18,7 @@ import { Loading } from "../components/Loading";
 import { useIsFocused } from "@react-navigation/native";
 import { LikedItem } from "../components/LikedItem";
 
-const Likes = () => {
+const Likes = ({navigation}: {navigation: any}) => {
   const [clothes, setClothes] = React.useState<ClothingItem[] | undefined>(undefined);
   const { userId } = React.useContext(AuthContext);
   const [error, setError] = React.useState(false);
@@ -34,7 +34,6 @@ const Likes = () => {
   if (error) {
     return <Error />
   } else if (clothes) {
-    console.error('here')
     return <ImageBackground
       source={require("../assets/images/bg.png")}
       style={styles.bg}
@@ -57,6 +56,7 @@ const Likes = () => {
                 <LikedItem
                   hasVariant
                   {...item}
+                  navigation={navigation}
                 />
               </TouchableOpacity>
             )}
