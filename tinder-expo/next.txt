@@ -1,0 +1,5 @@
+- detail view of clothing item
+- checkout page
+- buy now
+- improve cart (select item to buy individually, not whole cart?)
+-  
