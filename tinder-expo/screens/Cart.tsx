@@ -20,6 +20,7 @@ import { LikedItem } from "../components/LikedItem";
 import { CartItem } from "../components/CartItem";
 import { isNotUndefined } from "../predicates";
 import { Break } from "../util";
+import Svg, { Rect, Text as SvgText } from "react-native-svg";
 
 const Cart = ({ navigation }: { navigation: any }) => {
   const [items, setItems] = React.useState<ClothingItem[] | undefined>(undefined);
@@ -42,6 +43,8 @@ const Cart = ({ navigation }: { navigation: any }) => {
     );
   }, [isFocused]);
 
+  const goToCheckout = () => {}// navigation.navigate('Checkout')
+
   if (error) {
     return <Error />
   } else if (items) {
@@ -58,19 +61,27 @@ const Cart = ({ navigation }: { navigation: any }) => {
         </View>
 
         {items.length ?
-          <FlatList
-            numColumns={1}
-            data={items}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity>
-                <CartItem
-                  removeFromList={() => removeItemFromListByIndex(index)}
-                  item={item}
-                />
-              </TouchableOpacity>
-            )}
-          /> : <Empty />}
+          <>
+            <TouchableOpacity onPress={() => goToCheckout()} style={{}}>
+              <Svg height='30' width='100'>
+                <Rect x={0} y={0} rx={5} width={100} height={30} fill={"yellow"} stroke='black' />
+                <SvgText x='50' y='15' stroke='black' textAnchor='middle'>Checkout now</SvgText>
+              </Svg>
+            </TouchableOpacity>
+            <FlatList
+              numColumns={1}
+              data={items}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <TouchableOpacity>
+                  <CartItem
+                    removeFromList={() => removeItemFromListByIndex(index)}
+                    item={item}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </> : <Empty />}
       </View>
     </ImageBackground>
   } else {
@@ -81,7 +92,7 @@ const Cart = ({ navigation }: { navigation: any }) => {
 const Empty = () => {
   return <>
 
-    <Text>Nothing to see here...<Break/>Try adding something to your cart first</Text>
+    <Text>Nothing to see here...<Break />Try adding something to your cart first</Text>
     <Text></Text>
   </>
 }
