@@ -1,44 +1,88 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ScrollView,
+  View,
   Text,
   TouchableOpacity,
   ImageBackground,
-  View,
   FlatList,
 } from "react-native";
-import { Icon, Message } from "../components";
-import {clothes} from "../assets/data/demo";
+import { CardItem, Icon } from "../components";
+import { clothes } from "../assets/data/demo";
 import styles, { DARK_GRAY } from "../assets/styles";
+import { ClothingItem } from "../types";
+import { api } from "../api";
+import { AuthContext } from "../login/AuthContext";
+import { Error } from "./Error";
+import { Loading } from "../components/Loading";
+import { useIsFocused } from "@react-navigation/native";
+import { LikedItem } from "../components/LikedItem";
+import { CartItem } from "../components/CartItem";
+import { isNotUndefined } from "../predicates";
 
-const Cart = () => (
-  <ImageBackground
-    source={require("../assets/images/bg.png")}
-    style={styles.bg}
-  >
-    <View style={styles.containerCart}>
-      <View style={styles.top}>
-        <Text style={styles.title}>Cart</Text>
-        <TouchableOpacity>
-          <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
-        </TouchableOpacity>
-      </View>
+const Cart = ({ navigation }: { navigation: any }) => {
+  const [items, setItems] = React.useState<ClothingItem[] | undefined>(undefined);
+  const { userId } = React.useContext(AuthContext);
+  const [error, setError] = React.useState(false);
+  const isFocused = useIsFocused();
 
-      <FlatList
-        data={clothes}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+  const removeItemFromListByIndex = (index: number) => {
+    if (isNotUndefined(items)) {
+      const copyItems = [...items]
+      copyItems.splice(index)
+      setItems(copyItems)
+    }
+  }
+
+  useEffect(() => {
+    api.getCartItems(userId).then(
+      setItems,
+      () => setError(true)
+    );
+  }, [isFocused]);
+
+  if (error) {
+    return <Error />
+  } else if (items) {
+    return <ImageBackground
+      source={require("../assets/images/bg.png")}
+      style={styles.bg}
+    >
+      <View style={styles.containerLikes}>
+        <View style={styles.top}>
+          <Text style={styles.title}>Cart</Text>
           <TouchableOpacity>
-            <Message
-              image={item.image}
-              name={item.name}
-              lastMessage={item.message}
-            />
+            <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
           </TouchableOpacity>
-        )}
-      />
-    </View>
-  </ImageBackground>
-);
+        </View>
+
+        {items.length ?
+          <FlatList
+            numColumns={2}
+            data={items}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <TouchableOpacity>
+                <CartItem
+                  removeFromList={() => removeItemFromListByIndex(index)}
+                  item={item}
+                />
+              </TouchableOpacity>
+            )}
+          /> : <Empty />}
+      </View>
+    </ImageBackground>
+  } else {
+    return <Loading />
+  }
+}
+
+const Empty = () => {
+  return <>
+
+    <Text>Nothing to see here...<br />Try adding something to your cart first</Text>
+    <Text></Text>
+  </>
+}
 
 export default Cart;

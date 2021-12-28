@@ -44,6 +44,7 @@ export default StyleSheet.create({
   descriptionCardItem: {
     color: GRAY,
     textAlign: "center",
+    maxWidth: '80%'
   },
   status: {
     paddingBottom: 10,

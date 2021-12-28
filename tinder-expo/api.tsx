@@ -17,6 +17,8 @@ export const api = {
     login,
     getLikedClothesForUser,
     addItemToCart,
+    getCartItems,
+    removeFromCart,
 }
 
 async function likeItem(userId: string, item: ClothingItem): Promise<void> {
@@ -74,6 +76,32 @@ async function addItemToCart(userId: string, item: ClothingItem): Promise<void> 
         const user = db.users.find(({ id }) => id === userId)
         if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
         user.cartItems.unshift(item)
+        return Promise.resolve()
+    } catch (e) {
+        return Promise.reject(e)
+    }
+}
+
+async function getCartItems(userId: string): Promise<ClothingItem[]> {
+    console.debug(`getCartItems (userId='${userId}`)
+    try {
+        const user = db.users.find(({ id }) => id === userId)
+        if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
+        console.error(user.cartItems)
+        return Promise.resolve(user.cartItems)
+    } catch (e) {
+        return Promise.reject(e)
+    }
+}
+
+async function removeFromCart(userId: string, item: ClothingItem): Promise<void> {
+    console.debug(`removeFromCart (userId='${userId}, item=${stringify(item)})`)
+    try {
+        const user = db.users.find(({ id }) => id === userId)
+        if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
+        const itemInCartIndex = user.cartItems.findIndex(({ id }) => id === item.id)
+        if (itemInCartIndex === -1) { throw new Error(`Invalid item, item not found (itemId=${item.id})`) }
+        user.cartItems.splice(itemInCartIndex)
         return Promise.resolve()
     } catch (e) {
         return Promise.reject(e)
