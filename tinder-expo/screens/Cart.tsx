@@ -19,6 +19,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { LikedItem } from "../components/LikedItem";
 import { CartItem } from "../components/CartItem";
 import { isNotUndefined } from "../predicates";
+import { Break } from "../util";
 
 const Cart = ({ navigation }: { navigation: any }) => {
   const [items, setItems] = React.useState<ClothingItem[] | undefined>(undefined);
@@ -58,7 +59,7 @@ const Cart = ({ navigation }: { navigation: any }) => {
 
         {items.length ?
           <FlatList
-            numColumns={2}
+            numColumns={1}
             data={items}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
@@ -80,7 +81,7 @@ const Cart = ({ navigation }: { navigation: any }) => {
 const Empty = () => {
   return <>
 
-    <Text>Nothing to see here...<br />Try adding something to your cart first</Text>
+    <Text>Nothing to see here...<Break/>Try adding something to your cart first</Text>
     <Text></Text>
   </>
 }

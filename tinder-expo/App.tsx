@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home, Likes, Cart, Profile } from "./screens";
 import { PRIMARY_COLOR, DARK_GRAY, BLACK, WHITE } from "./assets/styles";
@@ -17,8 +16,8 @@ import { Text } from "react-native";
 import { useAuthReducer } from "./login/useAuthReducer";
 import { getToken } from "./login/token";
 import { Error } from "./screens/Error";
+import { Stack } from "./Stack";
 
-export const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 

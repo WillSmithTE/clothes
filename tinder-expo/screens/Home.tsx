@@ -6,7 +6,7 @@ import styles from "../assets/styles";
 import Logout from "../components/Logout";
 import { api } from "../api";
 import { ClothingItem } from "../types";
-import {AuthContext} from "../login/AuthContext";
+import { AuthContext } from "../login/AuthContext";
 
 const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
 
@@ -29,6 +29,7 @@ const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
         </View>
 
         <CardStack
+          style={{ height: '100%' }}
           onSwipedRight={onSwipedRight}
           loop
           verticalSwipe={false}
@@ -38,8 +39,8 @@ const Home = ({ clothes }: { clothes: ClothingItem[] }) => {
           {clothes.map((item) => (
             <Card key={item.id}>
               <CardItem
-              onLikeButtonPress={() => swiper.current?.swipeRight()}
-              onDislikeButtonPress={() => swiper.current?.swipeLeft()}
+                onLikeButtonPress={() => swiper.current?.swipeRight()}
+                onDislikeButtonPress={() => swiper.current?.swipeLeft()}
                 hasActions
                 {...item}
               />

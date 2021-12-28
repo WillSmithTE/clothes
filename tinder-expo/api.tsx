@@ -87,7 +87,6 @@ async function getCartItems(userId: string): Promise<ClothingItem[]> {
     try {
         const user = db.users.find(({ id }) => id === userId)
         if (user === undefined) { throw new Error(`Invalid userId, user not found (userId=${userId})`) }
-        console.error(user.cartItems)
         return Promise.resolve(user.cartItems)
     } catch (e) {
         return Promise.reject(e)

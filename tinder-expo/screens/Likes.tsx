@@ -17,6 +17,7 @@ import { Error } from "./Error";
 import { Loading } from "../components/Loading";
 import { useIsFocused } from "@react-navigation/native";
 import { LikedItem } from "../components/LikedItem";
+import { Break } from "../util";
 
 const Likes = ({navigation}: {navigation: any}) => {
   const [clothes, setClothes] = React.useState<ClothingItem[] | undefined>(undefined);
@@ -48,7 +49,7 @@ const Likes = ({navigation}: {navigation: any}) => {
 
         {clothes.length ?
           <FlatList
-            numColumns={2}
+            numColumns={1}
             data={clothes}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
@@ -69,8 +70,7 @@ const Likes = ({navigation}: {navigation: any}) => {
 
 const EmptyLikes = () => {
   return <>
-    
-    <Text>Nothing to see here...<br/>Try liking something first</Text>
+        <Text>Nothing to see here...<Break/>Try liking something first</Text>
     <Text></Text>
   </>
 }
