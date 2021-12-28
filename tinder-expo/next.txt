@@ -4,3 +4,5 @@
 - improve cart (select item to buy individually, not whole cart?)
 - filter for sizes and stuff?? :/
 - feedback on swipes (heart pops up? what does tinder do?)
+    when start swiping heart or rubbish in corner of card 
+- cart vs basket?
